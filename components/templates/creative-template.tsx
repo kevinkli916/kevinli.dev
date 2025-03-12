@@ -333,7 +333,13 @@ export function CreativeTemplate({
                       className="bg-blue-600 hover:bg-blue-700 text-white dark:bg-blue-500 dark:hover:bg-blue-600"
                       asChild
                     >
-                      <a href={project.link}>View Project</a>
+                      <a
+                        href={project.link}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        View Project
+                      </a>
                     </Button>
                   </CardContent>
                 </Card>

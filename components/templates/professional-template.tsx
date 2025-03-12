@@ -345,7 +345,13 @@ export function ProfessionalTemplate({
                           className="bg-primary hover:bg-primary/90"
                           asChild
                         >
-                          <a href={project.link}>View Project</a>
+                          <a
+                            href={project.link}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
+                            View Project
+                          </a>
                         </Button>
                       </CardContent>
                     </Card>

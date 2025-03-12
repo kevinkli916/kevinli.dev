@@ -326,7 +326,13 @@ export function MinimalTemplate({
                       className="hover:bg-primary hover:text-primary-foreground transition-colors"
                       asChild
                     >
-                      <a href={project.link}>View Project</a>
+                      <a
+                        href={project.link}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        View Project
+                      </a>
                     </Button>
                   </CardContent>
                 </Card>
