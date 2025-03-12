@@ -98,7 +98,7 @@ const personalData: PersonalData = {
       title: "kevinli.dev",
       description:
         "A responsive portfolio website built with Next.js and Tailwind CSS.",
-      link: "#",
+      link: "https://github.com/kevinkli916/kevinli.dev",
       tags: ["HTML", "Next.js", "Tailwind CSS", "Apache"],
     },
   ],
