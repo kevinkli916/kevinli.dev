@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   Github,
   Linkedin,
@@ -44,6 +44,13 @@ export function MinimalTemplate({
 }: MinimalTemplateProps) {
   // State to track which experience items are expanded
   const [expandedExperience, setExpandedExperience] = useState<number[]>([]);
+  const [showPulse, setShowPulse] = useState(true);
+
+  useEffect(() => {
+    // Remove pulse effect after 5 seconds
+    const timer = setTimeout(() => setShowPulse(false), 5000);
+    return () => clearTimeout(timer);
+  }, []);
 
   // Toggle expanded state for an experience item
   const toggleExpand = (index: number) => {
@@ -155,7 +162,12 @@ export function MinimalTemplate({
 
         <section className="mb-12">
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-2xl font-semibold">Skills</h2>
+            <div>
+              <h2 className="text-2xl font-semibold">Skills</h2>
+              <p className="text-xs text-muted-foreground">
+                Click on badges to filter experience and projects
+              </p>
+            </div>
             <div className="flex items-center gap-4">
               {selectedSkills.length > 1 && (
                 <div className="flex items-center space-x-2">
@@ -197,7 +209,10 @@ export function MinimalTemplate({
                     variant={
                       selectedSkills.includes(skill) ? "default" : "secondary"
                     }
-                    className="cursor-pointer transition-all duration-200 hover:scale-105"
+                    className={`
+                    cursor-pointer transition-all duration-200 hover:scale-105 flex items-center gap-1
+                    ${!selectedSkills.includes(skill) ? "bg-blue-50 border-blue-200 text-blue-700 hover:bg-blue-100" : ""}
+                    `}
                     onClick={() => onSkillClick(skill)}
                   >
                     {skill}
