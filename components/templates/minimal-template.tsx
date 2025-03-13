@@ -44,13 +44,6 @@ export function MinimalTemplate({
 }: MinimalTemplateProps) {
   // State to track which experience items are expanded
   const [expandedExperience, setExpandedExperience] = useState<number[]>([]);
-  const [showPulse, setShowPulse] = useState(true);
-
-  useEffect(() => {
-    // Remove pulse effect after 5 seconds
-    const timer = setTimeout(() => setShowPulse(false), 5000);
-    return () => clearTimeout(timer);
-  }, []);
 
   // Toggle expanded state for an experience item
   const toggleExpand = (index: number) => {
@@ -165,38 +158,55 @@ export function MinimalTemplate({
             <div>
               <h2 className="text-2xl font-semibold">Skills</h2>
               <p className="text-xs text-muted-foreground">
-                Click on badges to filter experience and projects
+                Click badges to filter content
               </p>
             </div>
-            <div className="flex items-center gap-4">
-              {selectedSkills.length > 1 && (
-                <div className="flex items-center space-x-2">
-                  <Label htmlFor="filter-mode" className="text-sm pl-2">
-                    Filtering mode: OR
-                  </Label>
-                  <Switch
-                    id="filter-mode"
-                    checked={isAndFilter}
-                    onCheckedChange={setIsAndFilter}
-                  />
-                  <Label htmlFor="filter-mode" className="text-sm">
-                    AND
-                  </Label>
-                </div>
-              )}
-              {selectedSkills.length > 0 && (
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={clearFilters}
-                  className="text-muted-foreground"
-                >
-                  Clear filter <X className="ml-1 h-4 w-4" />
-                </Button>
-              )}
+
+            {/* Filter controls - always visible */}
+            <div className="flex items-center gap-2 px-3 py-1.5 bg-blue-50 border border-blue-200 rounded-md shadow-sm">
+              <div
+                className={`flex items-center space-x-2 pr-2 border-r border-blue-200 ${selectedSkills.length <= 1 ? "opacity-50" : ""}`}
+              >
+                <Label htmlFor="filter-mode" className="text-sm text-blue-700">
+                  OR
+                </Label>
+                <Switch
+                  id="filter-mode"
+                  checked={isAndFilter}
+                  onCheckedChange={setIsAndFilter}
+                  disabled={selectedSkills.length <= 1}
+                />
+                <Label htmlFor="filter-mode" className="text-sm text-blue-700">
+                  AND
+                </Label>
+              </div>
+
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={clearFilters}
+                className={`
+          text-blue-700 hover:bg-blue-100/80 hover:text-blue-800 h-7
+          ${selectedSkills.length === 0 ? "opacity-50 cursor-not-allowed" : ""}
+        `}
+                disabled={selectedSkills.length === 0}
+              >
+                Clear <X className="ml-1 h-3.5 w-3.5" />
+              </Button>
             </div>
           </div>
 
+          {/* Active filters indicator */}
+          {selectedSkills.length > 0 && (
+            <div className="mb-4 p-2 bg-blue-50/80 border-l-4 border-blue-400 rounded text-sm text-blue-700">
+              Showing content filtered by:{" "}
+              <span className="font-medium">
+                {selectedSkills.join(isAndFilter ? " AND " : " OR ")}
+              </span>
+            </div>
+          )}
+
+          {/* Skill badges - no pulse animation */}
           {data.skillCategories.map((category, categoryIndex) => (
             <div key={categoryIndex} className="mb-6">
               <h3 className="text-lg font-medium mb-3 text-primary">
@@ -210,10 +220,15 @@ export function MinimalTemplate({
                       selectedSkills.includes(skill) ? "default" : "secondary"
                     }
                     className={`
-                    cursor-pointer transition-all duration-200 hover:scale-105 flex items-center gap-1
-                    ${!selectedSkills.includes(skill) ? "bg-blue-50 border-blue-200 text-blue-700 hover:bg-blue-100" : ""}
-                    `}
+              cursor-pointer transition-colors hover:scale-105
+              ${
+                !selectedSkills.includes(skill)
+                  ? "border border-blue-200 bg-blue-50/60 text-blue-700 hover:bg-blue-100"
+                  : "border-transparent"
+              }
+            `}
                     onClick={() => onSkillClick(skill)}
+                    title="Click to filter content"
                   >
                     {skill}
                   </Badge>
@@ -228,7 +243,7 @@ export function MinimalTemplate({
             Experience{" "}
             {selectedSkills.length > 0 && (
               <span className="text-sm font-normal text-muted-foreground ml-2">
-                Filtered by{" "}
+                Filtered by:{" "}
                 {selectedSkills.join(isAndFilter ? " AND " : " OR ")}
               </span>
             )}
@@ -300,7 +315,7 @@ export function MinimalTemplate({
             Projects{" "}
             {selectedSkills.length > 0 && (
               <span className="text-sm font-normal text-muted-foreground ml-2">
-                Filtered by{" "}
+                Filtered by:{" "}
                 {selectedSkills.join(isAndFilter ? " AND " : " OR ")}
               </span>
             )}

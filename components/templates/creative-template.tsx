@@ -220,7 +220,7 @@ export function CreativeTemplate({
             Experience{" "}
             {selectedSkills.length > 0 && (
               <span className="text-sm font-normal text-foreground ml-2">
-                Filtered by{" "}
+                Filtered by:{" "}
                 {selectedSkills.join(isAndFilter ? " AND " : " OR ")}
               </span>
             )}
@@ -294,7 +294,7 @@ export function CreativeTemplate({
             Projects{" "}
             {selectedSkills.length > 0 && (
               <span className="text-sm font-normal text-foreground ml-2">
-                Filtered by{" "}
+                Filtered by:{" "}
                 {selectedSkills.join(isAndFilter ? " AND " : " OR ")}
               </span>
             )}
