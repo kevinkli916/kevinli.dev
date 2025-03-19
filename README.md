@@ -1,3 +1,3 @@
-# <a href="https://kevinli.dev" target="_blank">kevinli.dev</a>
+# [kevinli.dev](https://kevinli.dev)
 
 A personal website created using Next.js and Tailwind CSS.
