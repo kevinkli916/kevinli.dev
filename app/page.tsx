@@ -40,12 +40,15 @@ const personalData: PersonalData = {
     {
       category: "Backend",
       skills: [
+        "Python",
+        "Java",
         "C#",
         "ASP.NET Framework MVC",
         "ASP.NET Core MVC",
         "Entity Framework",
         "Node.js",
         "Express.js",
+        "Codename One",
       ],
     },
     {
@@ -81,25 +84,25 @@ const personalData: PersonalData = {
   ],
   projects: [
     {
-      title: "E-commerce Platform",
-      description:
-        "A full-stack e-commerce platform with payment processing and inventory management.",
-      link: "#",
-      tags: ["JavaScript", "React", "Node.js"],
-    },
-    {
-      title: "Task Management App",
-      description:
-        "A collaborative task management application with real-time updates.",
-      link: "#",
-      tags: ["TypeScript", "React", "Next.js"],
-    },
-    {
       title: "kevinli.dev",
       description:
         "A responsive portfolio website built with Next.js and Tailwind CSS.",
       link: "https://github.com/kevinkli916/kevinli.dev",
       tags: ["HTML", "Next.js", "Tailwind CSS", "Apache"],
+    },
+    {
+      title: "Bugz",
+      description:
+        'A hungry bug collects food while avoiding spiders. Built using Codename One to "Write Once, Run Anywhere".',
+      link: "https://github.com/kevinkli916/Bugz",
+      tags: ["Java", "Codename One"],
+    },
+    {
+      title: "Machine Learning Fundamentals",
+      description:
+        "A collection of Jupyter Notebooks showcasing the fundamentals of machine learning from data exploration and preprocessing to classification, clustering, and anomaly detection—all available online through nbviewer.",
+      link: "https://github.com/kevinkli916/ml-concepts",
+      tags: ["Python"],
     },
   ],
   experience: [
