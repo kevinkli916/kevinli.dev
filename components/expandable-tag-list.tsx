@@ -25,7 +25,7 @@ export function ExpandableTagList({
         <Badge
           key={tag}
           variant="secondary"
-          className="border border-slate-200 bg-slate-50 px-2.5 py-1 text-[11px] font-medium text-slate-700 hover:bg-slate-50"
+          className="border border-slate-200 bg-slate-50 px-2.5 py-1 text-[11px] font-medium text-slate-700 hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300 dark:hover:bg-slate-900"
         >
           {tag}
         </Badge>
@@ -37,7 +37,7 @@ export function ExpandableTagList({
           size="sm"
           aria-expanded={isExpanded}
           onClick={() => setIsExpanded((expanded) => !expanded)}
-          className="h-7 rounded-full border-slate-200 bg-white px-2.5 text-[11px] font-medium text-slate-600 shadow-none transition-colors hover:border-slate-300 hover:bg-slate-50 hover:text-slate-950"
+          className="h-7 rounded-full border-slate-200 bg-white px-2.5 text-[11px] font-medium text-slate-600 shadow-none transition-colors hover:border-slate-300 hover:bg-slate-50 hover:text-slate-950 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300 dark:hover:border-slate-600 dark:hover:bg-slate-800 dark:hover:text-white"
         >
           {isExpanded ? (
             <>
