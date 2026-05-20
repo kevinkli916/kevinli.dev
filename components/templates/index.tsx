@@ -1,8 +1,3 @@
-import MinimalTemplateComponent from "./minimal-template"
-import CreativeTemplateComponent from "./creative-template"
-import ProfessionalTemplateComponent from "./professional-template"
+import MinimalTemplateComponent from "./minimal-template";
 
-export const MinimalTemplate = MinimalTemplateComponent
-export const CreativeTemplate = CreativeTemplateComponent
-export const ProfessionalTemplate = ProfessionalTemplateComponent
-
+export const MinimalTemplate = MinimalTemplateComponent;

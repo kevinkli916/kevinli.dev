@@ -6,8 +6,8 @@ export interface PersonalData {
   email: string
   github: string
   linkedin: string
-  twitter: string
-  resume?: string // Path to resume file
+  twitter?: string
+  resume?: string
   skillCategories: {
     category: string
     skills: string[]
@@ -16,22 +16,21 @@ export interface PersonalData {
     title: string
     description: string
     link: string
-    tags: string[] // For filtering
+    tags: string[]
   }[]
   experience: {
     company: string
     position: string
     period: string
     description: string
-    bulletPoints?: string[] // Added bullet points for detailed experience
-    tags: string[] // Added tags for experience filtering
+    bulletPoints?: string[]
+    tags: string[]
   }[]
   education: {
     institution: string
     degree: string
     period: string
     description?: string
-    tags?: string[] // Optional tags for filtering
+    tags?: string[]
   }[]
 }
-

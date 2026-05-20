@@ -1,22 +1,14 @@
-"use client";
-
-import { useState } from "react";
 import { MinimalTemplate } from "@/components/templates/minimal-template";
-import { CreativeTemplate } from "@/components/templates/creative-template";
-import { ProfessionalTemplate } from "@/components/templates/professional-template";
-import TemplateSwitcher from "@/components/template-switcher";
 import type { PersonalData } from "@/types/personal-data";
 
-// Sample data
 const personalData: PersonalData = {
   name: "Kevin Li",
   title: "Full-Stack Software Engineer",
-  bio: "I'm a passionate developer with 5+ years of experience building web applications. I specialize in React, Next.js, and Node.js.",
+  bio: "I build reliable, maintainable web applications with a focus on public-sector systems, modern React interfaces, secure APIs, and practical delivery pipelines.",
   location: "California, USA",
   email: "kevin@kevinli.dev",
   linkedin: "https://linkedin.com/in/kevinli916",
   github: "https://github.com/kevinkli916",
-  // twitter: "https://twitter.com/test",
   resume: "/resume.pdf", // Path to your resume file
   skillCategories: [
     {
@@ -235,97 +227,5 @@ const personalData: PersonalData = {
 };
 
 export default function Home() {
-  const [activeTemplate, setActiveTemplate] = useState<
-    "minimal" | "creative" | "professional"
-  >("minimal");
-  const [selectedSkills, setSelectedSkills] = useState<string[]>([]);
-  const [isAndFilter, setIsAndFilter] = useState<boolean>(false);
-  const [showTemplatePicker, setShowTemplatePicker] = useState<boolean>(
-    process.env.NODE_ENV === "development",
-  );
-
-  // Create a flat array of all skills for filtering
-  const allSkills = personalData.skillCategories.flatMap(
-    (category) => category.skills,
-  );
-
-  const handleSkillClick = (skill: string) => {
-    if (selectedSkills.includes(skill)) {
-      setSelectedSkills(selectedSkills.filter((s) => s !== skill)); // Remove skill if already selected
-    } else {
-      setSelectedSkills([...selectedSkills, skill]); // Add skill if not selected
-    }
-  };
-
-  // Filter projects based on selected skills and filter mode
-  const filteredProjects =
-    selectedSkills.length > 0
-      ? personalData.projects.filter((project) => {
-          if (isAndFilter) {
-            // AND logic: project must have ALL selected skills
-            return selectedSkills.every((skill) =>
-              project.tags.includes(skill),
-            );
-          } else {
-            // OR logic: project must have AT LEAST ONE selected skill
-            return selectedSkills.some((skill) => project.tags.includes(skill));
-          }
-        })
-      : personalData.projects;
-
-  // Filter experience based on selected skills and filter mode
-  const filteredExperience =
-    selectedSkills.length > 0
-      ? personalData.experience.filter((exp) => {
-          if (isAndFilter) {
-            // AND logic: experience must have ALL selected skills
-            return selectedSkills.every((skill) => exp.tags.includes(skill));
-          } else {
-            // OR logic: experience must have AT LEAST ONE selected skill
-            return selectedSkills.some((skill) => exp.tags.includes(skill));
-          }
-        })
-      : personalData.experience;
-
-  // Clear all filters
-  const clearFilters = () => {
-    setSelectedSkills([]);
-  };
-
-  const renderTemplate = () => {
-    const templateProps = {
-      data: personalData,
-      selectedSkills,
-      onSkillClick: handleSkillClick,
-      clearFilters,
-      allSkills,
-      isAndFilter,
-      setIsAndFilter,
-      filteredProjects,
-      filteredExperience,
-    };
-
-    switch (activeTemplate) {
-      case "minimal":
-        return <MinimalTemplate {...templateProps} />;
-      case "creative":
-        return <CreativeTemplate {...templateProps} />;
-      case "professional":
-        return <ProfessionalTemplate {...templateProps} />;
-      default:
-        return <MinimalTemplate {...templateProps} />;
-    }
-  };
-
-  return (
-    <main className="min-h-screen">
-      {showTemplatePicker && (
-        <TemplateSwitcher
-          activeTemplate={activeTemplate}
-          setActiveTemplate={setActiveTemplate}
-        />
-      )}
-      {renderTemplate()}
-    </main>
-  );
+  return <MinimalTemplate data={personalData} />;
 }
