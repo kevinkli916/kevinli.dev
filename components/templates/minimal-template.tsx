@@ -138,7 +138,7 @@ export function MinimalTemplate({ data }: MinimalTemplateProps) {
                   </div>
                   <div>
                     <dt className="text-2xl font-semibold tracking-tight text-slate-950 dark:text-white">M.S. CS</dt>
-                    <dd className="mt-1 text-sm text-slate-600 dark:text-slate-300">Georgia Tech candidate, GPA 4.0</dd>
+                    <dd className="mt-1 text-sm text-slate-600 dark:text-slate-300">Georgia Tech student, GPA 4.0</dd>
                   </div>
                 </dl>
               </CardContent>
@@ -282,9 +282,9 @@ export function MinimalTemplate({ data }: MinimalTemplateProps) {
                     The easiest way to reach me is by email. You can also find more of my work on GitHub and connect with me on LinkedIn.
                   </p>
                 </div>
-                <div className="flex flex-wrap gap-3">
+                <div className="grid grid-cols-2 gap-3 sm:min-w-72">
                   {data.resume && (
-                    <Button variant="secondary" className="rounded-full bg-white text-slate-950 hover:bg-slate-100 dark:bg-slate-950 dark:text-white dark:hover:bg-slate-800" asChild>
+                    <Button variant="secondary" className="w-full rounded-full bg-white text-slate-950 hover:bg-slate-100 dark:bg-slate-950 dark:text-white dark:hover:bg-slate-800" asChild>
                       <TrackedLink href={data.resume} download="resume.pdf" eventName="resume_download" eventProperties={{ location: "contact" }}>
                         <Download className="mr-2 h-4 w-4" aria-hidden="true" />
                         Resume
@@ -292,7 +292,7 @@ export function MinimalTemplate({ data }: MinimalTemplateProps) {
                     </Button>
                   )}
                   {socialLinks.map(({ label, href, Icon }) => (
-                    <Button key={label} variant="secondary" className="rounded-full bg-white text-slate-950 hover:bg-slate-100 dark:bg-slate-950 dark:text-white dark:hover:bg-slate-800" asChild>
+                    <Button key={label} variant="secondary" className="w-full rounded-full bg-white text-slate-950 hover:bg-slate-100 dark:bg-slate-950 dark:text-white dark:hover:bg-slate-800" asChild>
                       <TrackedLink
                         href={href}
                         target={label === "Email" ? undefined : "_blank"}
