@@ -7,6 +7,7 @@ import {
   MapPin,
   Twitter,
 } from "lucide-react";
+import { ExpandableTagList } from "@/components/expandable-tag-list";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -42,8 +43,8 @@ function SectionHeading({
   );
 }
 
-function TagList({ tags, limit = 8 }: { tags: string[]; limit?: number }) {
-  const visibleTags = tags.slice(0, limit);
+function TagList({ tags, limit }: { tags: string[]; limit?: number }) {
+  const visibleTags = typeof limit === "number" ? tags.slice(0, limit) : tags;
   const remainingCount = tags.length - visibleTags.length;
 
   return (
@@ -138,7 +139,7 @@ export function MinimalTemplate({ data }: MinimalTemplateProps) {
               </div>
             </div>
 
-            <Card className="border-slate-200 bg-white shadow-sm">
+            <Card className="border-slate-200 bg-white shadow-sm transition-all duration-200 motion-safe:hover:-translate-y-0.5 hover:border-slate-300 hover:shadow-md">
               <CardContent className="p-6">
                 <p className="text-sm font-medium text-slate-500">At a glance</p>
                 <dl className="mt-5 grid gap-5">
@@ -168,7 +169,10 @@ export function MinimalTemplate({ data }: MinimalTemplateProps) {
 
             <div className="space-y-5">
               {data.experience.map((exp) => (
-                <Card key={`${exp.company}-${exp.period}`} className="border-slate-200 bg-white shadow-sm">
+                <Card
+                  key={`${exp.company}-${exp.period}`}
+                  className="border-slate-200 bg-white shadow-sm transition-all duration-200 motion-safe:hover:-translate-y-0.5 hover:border-slate-300 hover:shadow-md"
+                >
                   <CardContent className="p-6 sm:p-7">
                     <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
                       <div>
@@ -189,7 +193,10 @@ export function MinimalTemplate({ data }: MinimalTemplateProps) {
                         ))}
                       </ul>
                     )}
-                    <div className="mt-5">
+                    <div className="mt-5 border-t border-slate-100 pt-5">
+                      <p className="mb-3 text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">
+                        Technologies
+                      </p>
                       <TagList tags={exp.tags} />
                     </div>
                   </CardContent>
@@ -207,7 +214,10 @@ export function MinimalTemplate({ data }: MinimalTemplateProps) {
 
             <div className="grid gap-5 md:grid-cols-3">
               {data.projects.map((project) => (
-                <Card key={project.title} className="flex border-slate-200 bg-white shadow-sm transition-shadow hover:shadow-md">
+                <Card
+                  key={project.title}
+                  className="flex border-slate-200 bg-white shadow-sm transition-all duration-200 motion-safe:hover:-translate-y-0.5 hover:border-slate-300 hover:shadow-md"
+                >
                   <CardContent className="flex min-h-full flex-col p-6">
                     <h3 className="text-lg font-semibold tracking-tight text-slate-950">{project.title}</h3>
                     <p className="mt-3 flex-1 text-sm leading-6 text-slate-600">{project.description}</p>
@@ -235,10 +245,13 @@ export function MinimalTemplate({ data }: MinimalTemplateProps) {
 
             <div className="grid gap-4 sm:grid-cols-2">
               {data.skillCategories.map((category) => (
-                <Card key={category.category} className="border-slate-200 bg-white shadow-sm">
+                <Card
+                  key={category.category}
+                  className="border-slate-200 bg-white shadow-sm transition-all duration-200 motion-safe:hover:-translate-y-0.5 hover:border-slate-300 hover:shadow-md"
+                >
                   <CardContent className="p-6">
                     <h3 className="mb-4 font-semibold tracking-tight text-slate-950">{category.category}</h3>
-                    <TagList tags={category.skills} limit={12} />
+                    <ExpandableTagList tags={category.skills} initialLimit={12} />
                   </CardContent>
                 </Card>
               ))}
@@ -250,7 +263,10 @@ export function MinimalTemplate({ data }: MinimalTemplateProps) {
 
             <div className="grid gap-5 md:grid-cols-2">
               {data.education.map((edu) => (
-                <Card key={`${edu.institution}-${edu.period}`} className="border-slate-200 bg-white shadow-sm">
+                <Card
+                  key={`${edu.institution}-${edu.period}`}
+                  className="border-slate-200 bg-white shadow-sm transition-all duration-200 motion-safe:hover:-translate-y-0.5 hover:border-slate-300 hover:shadow-md"
+                >
                   <CardContent className="p-6">
                     <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
                       <div>
@@ -272,7 +288,7 @@ export function MinimalTemplate({ data }: MinimalTemplateProps) {
           </section>
 
           <section id="contact" className="scroll-mt-8 border-t border-slate-200 py-14 sm:py-16">
-            <Card className="border-slate-200 bg-slate-950 text-white shadow-sm">
+            <Card className="border-slate-200 bg-slate-950 text-white shadow-sm transition-all duration-200 motion-safe:hover:-translate-y-0.5 hover:shadow-lg">
               <CardContent className="flex flex-col gap-8 p-7 sm:flex-row sm:items-center sm:justify-between sm:p-8">
                 <div>
                   <p className="text-xs font-semibold uppercase tracking-[0.25em] text-slate-400">Contact</p>
