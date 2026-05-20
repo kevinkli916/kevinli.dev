@@ -138,7 +138,7 @@ export function MinimalTemplate({ data }: MinimalTemplateProps) {
                   </div>
                   <div>
                     <dt className="text-2xl font-semibold tracking-tight text-slate-950 dark:text-white">M.S. CS</dt>
-                    <dd className="mt-1 text-sm text-slate-600 dark:text-slate-300">Georgia Tech candidate, GPA 4.0</dd>
+                    <dd className="mt-1 text-sm text-slate-600 dark:text-slate-300">Georgia Tech student, GPA 4.0</dd>
                   </div>
                 </dl>
               </CardContent>
