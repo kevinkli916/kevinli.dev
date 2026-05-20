@@ -9,9 +9,24 @@ import { SpeedInsights } from "@vercel/speed-insights/next";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://kevinli.dev"),
   title: "Kevin Li | Full-Stack Software Engineer",
   description:
-    "A personal website showcasing skills, experience, and projects.",
+    "Kevin Li is a full-stack software engineer building reliable public-sector web applications with React, Next.js, Node.js, C#, and SQL.",
+  openGraph: {
+    title: "Kevin Li | Full-Stack Software Engineer",
+    description:
+      "Portfolio, experience, projects, and contact information for Kevin Li.",
+    url: "https://kevinli.dev",
+    siteName: "Kevin Li",
+    type: "website",
+  },
+  twitter: {
+    card: "summary",
+    title: "Kevin Li | Full-Stack Software Engineer",
+    description:
+      "Portfolio, experience, projects, and contact information for Kevin Li.",
+  },
   icons: {
     icon: "/favicon.ico",
   },
@@ -23,13 +38,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body className={inter.className}>
         <ThemeProvider
           attribute="class"
           defaultTheme="light"
-          forcedTheme="light"
-          enableSystem
+          enableSystem={false}
           disableTransitionOnChange
         >
           {children}

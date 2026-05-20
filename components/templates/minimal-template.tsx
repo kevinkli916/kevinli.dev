@@ -1,411 +1,319 @@
-"use client";
-
-import { useState, useEffect } from "react";
 import {
+  ArrowUpRight,
+  Download,
   Github,
   Linkedin,
   Mail,
   MapPin,
   Twitter,
-  X,
-  Download,
-  ChevronDown,
-  ChevronUp,
 } from "lucide-react";
+import { BackToTop } from "@/components/back-to-top";
+import { ExpandableTagList } from "@/components/expandable-tag-list";
+import { SiteHeader } from "@/components/site-header";
+import { TrackedLink } from "@/components/tracked-link";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Switch } from "@/components/ui/switch";
-import { Label } from "@/components/ui/label";
 import type { PersonalData } from "@/types/personal-data";
 
 interface MinimalTemplateProps {
   data: PersonalData;
-  selectedSkills: string[];
-  onSkillClick: (skill: string) => void;
-  clearFilters: () => void;
-  allSkills: string[];
-  isAndFilter: boolean;
-  setIsAndFilter: (value: boolean) => void;
-  filteredProjects: typeof PersonalData.prototype.projects;
-  filteredExperience: typeof PersonalData.prototype.experience;
 }
 
-export function MinimalTemplate({
-  data,
-  selectedSkills,
-  onSkillClick,
-  clearFilters,
-  allSkills,
-  isAndFilter,
-  setIsAndFilter,
-  filteredProjects,
-  filteredExperience,
-}: MinimalTemplateProps) {
-  // State to track which experience items are expanded
-  const [expandedExperience, setExpandedExperience] = useState<number[]>([]);
+function SectionHeading({
+  eyebrow,
+  title,
+  description,
+}: {
+  eyebrow: string;
+  title: string;
+  description?: string;
+}) {
+  return (
+    <div className="mb-8">
+      <p className="mb-2 text-xs font-semibold uppercase tracking-[0.25em] text-slate-500 dark:text-slate-400">
+        {eyebrow}
+      </p>
+      <h2 className="text-2xl font-semibold tracking-tight text-slate-950 dark:text-white sm:text-3xl">
+        {title}
+      </h2>
+      {description && (
+        <p className="mt-3 max-w-2xl text-sm leading-6 text-slate-600 dark:text-slate-300 sm:text-base">
+          {description}
+        </p>
+      )}
+    </div>
+  );
+}
 
-  // Toggle expanded state for an experience item
-  const toggleExpand = (index: number) => {
-    setExpandedExperience((prev) =>
-      prev.includes(index) ? prev.filter((i) => i !== index) : [...prev, index],
-    );
-  };
+function TagList({ tags, limit }: { tags: string[]; limit?: number }) {
+  const visibleTags = typeof limit === "number" ? tags.slice(0, limit) : tags;
+  const remainingCount = tags.length - visibleTags.length;
 
   return (
-    <div className="min-h-screen bg-background text-foreground py-12 sm:py-16 px-3 sm:px-6 lg:px-8">
-      <div className="max-w-3xl mx-auto">
-        <header className="text-center mb-12 pt-4 sm:pt-8">
-          <h1 className="text-4xl font-bold mb-2">{data.name}</h1>
-          <p className="text-xl text-primary mb-4">{data.title}</p>
-          <p className="text-muted-foreground mb-6 max-w-xl mx-auto leading-relaxed">
-            {data.bio}
-          </p>
-          <div className="flex justify-center items-center gap-4 mb-6">
-            <div className="flex items-center text-muted-foreground">
-              <MapPin className="h-4 w-4 mr-1" />
-              <span>{data.location}</span>
-            </div>
-          </div>
+    <div className="flex flex-wrap gap-2">
+      {visibleTags.map((tag) => (
+        <Badge
+          key={tag}
+          variant="secondary"
+          className="border border-slate-200 bg-slate-50 px-2.5 py-1 text-[11px] font-medium text-slate-700 hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300 dark:hover:bg-slate-900"
+        >
+          {tag}
+        </Badge>
+      ))}
+      {remainingCount > 0 && (
+        <Badge
+          variant="outline"
+          className="border-slate-200 px-2.5 py-1 text-[11px] font-medium text-slate-500 dark:border-slate-700 dark:text-slate-400"
+        >
+          +{remainingCount} more
+        </Badge>
+      )}
+    </div>
+  );
+}
 
-          <div className="flex justify-center gap-4 mb-4">
-            <Button
-              variant="outline"
-              size="icon"
-              className="rounded-full hover:bg-secondary hover:text-primary transition-colors"
-              asChild
-            >
-              <a href={`mailto:${data.email}`} aria-label="Email">
-                <Mail className="h-4 w-4" />
-              </a>
-            </Button>
-            {data.linkedin && (
-              <Button
-                variant="outline"
-                size="icon"
-                className="rounded-full hover:bg-secondary hover:text-primary transition-colors"
-                asChild
-              >
-                <a
-                  href={data.linkedin}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label="LinkedIn"
-                >
-                  <Linkedin className="h-4 w-4" />
-                </a>
-              </Button>
-            )}
-            {data.twitter && (
-              <Button
-                variant="outline"
-                size="icon"
-                className="rounded-full hover:bg-secondary hover:text-primary transition-colors"
-                asChild
-              >
-                <a
-                  href={data.twitter}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label="Twitter"
-                >
-                  <Twitter className="h-4 w-4" />
-                </a>
-              </Button>
-            )}
-            {data.github && (
-              <Button
-                variant="outline"
-                size="icon"
-                className="rounded-full hover:bg-secondary hover:text-primary transition-colors"
-                asChild
-              >
-                <a
-                  href={data.github}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label="GitHub"
-                >
-                  <Github className="h-4 w-4" />
-                </a>
-              </Button>
-            )}
-          </div>
+export function MinimalTemplate({ data }: MinimalTemplateProps) {
+  const socialLinks = [
+    { label: "Email", href: `mailto:${data.email}`, Icon: Mail },
+    data.linkedin && { label: "LinkedIn", href: data.linkedin, Icon: Linkedin },
+    data.github && { label: "GitHub", href: data.github, Icon: Github },
+    data.twitter && { label: "Twitter", href: data.twitter, Icon: Twitter },
+  ].filter(Boolean) as {
+    label: string;
+    href: string;
+    Icon: typeof Mail;
+  }[];
 
-          {data.resume && (
-            <div className="flex justify-center">
-              <Button
-                variant="outline"
-                size="sm"
-                className="text-xs h-7 px-2 flex items-center gap-1 w-24"
-                asChild
-              >
-                <a
-                  href={data.resume}
-                  download={"resume.pdf"}
-                  aria-label="Download Resume"
-                >
-                  <Download className="h-3 w-3" />
-                  <span>Resume</span>
-                </a>
-              </Button>
-            </div>
-          )}
-        </header>
+  return (
+    <div className="min-h-screen bg-slate-50 text-slate-950 dark:bg-slate-950 dark:text-slate-100">
+      <div className="mx-auto max-w-5xl px-5 sm:px-6 lg:px-8">
+        <SiteHeader />
 
-        <section className="mb-12">
-          <div className="flex items-center justify-between mb-4">
+        <main id="top">
+          <section className="grid gap-10 py-16 sm:py-20 lg:grid-cols-[1.4fr_0.8fr] lg:items-end">
             <div>
-              <h2 className="text-2xl font-semibold">Skills</h2>
-              <p className="text-xs text-muted-foreground">
-                Click badges to filter content
+              <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-3 py-1 text-sm text-slate-600 shadow-sm dark:border-slate-800 dark:bg-slate-900 dark:text-slate-300">
+                <MapPin className="h-3.5 w-3.5" aria-hidden="true" />
+                <span>{data.location}</span>
+              </div>
+              <h1 className="max-w-3xl text-4xl font-semibold tracking-[-0.04em] text-slate-950 dark:text-white sm:text-5xl lg:text-6xl">
+                {data.name}
+              </h1>
+              <p className="mt-4 text-xl font-medium text-slate-700 dark:text-slate-200 sm:text-2xl">
+                {data.title}
               </p>
-            </div>
-
-            {/* Filter controls - always visible */}
-            <div className="flex items-center gap-2 px-3 py-1.5 bg-blue-50 border border-blue-200 rounded-md shadow-sm">
-              <div
-                className={`flex items-center space-x-2 pr-2 border-r border-blue-200 ${selectedSkills.length <= 1 ? "opacity-50" : ""}`}
-              >
-                <Label htmlFor="filter-mode" className="text-sm text-blue-700">
-                  OR
-                </Label>
-                <Switch
-                  id="filter-mode"
-                  checked={isAndFilter}
-                  onCheckedChange={setIsAndFilter}
-                  disabled={selectedSkills.length <= 1}
-                />
-                <Label htmlFor="filter-mode" className="text-sm text-blue-700">
-                  AND
-                </Label>
-              </div>
-
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={clearFilters}
-                className={`
-          text-blue-700 hover:bg-blue-100/80 hover:text-blue-800 h-7
-          ${selectedSkills.length === 0 ? "opacity-50 cursor-not-allowed" : ""}
-        `}
-                disabled={selectedSkills.length === 0}
-              >
-                Clear <X className="ml-1 h-3.5 w-3.5" />
-              </Button>
-            </div>
-          </div>
-
-          {/* Active filters indicator */}
-          {selectedSkills.length > 0 && (
-            <div className="mb-4 p-2 bg-blue-50/80 border-l-4 border-blue-400 rounded text-sm text-blue-700">
-              Showing content filtered by:{" "}
-              <span className="font-medium">
-                {selectedSkills.join(isAndFilter ? " AND " : " OR ")}
-              </span>
-            </div>
-          )}
-
-          {/* Skill badges - no pulse animation */}
-          {data.skillCategories.map((category, categoryIndex) => (
-            <div key={categoryIndex} className="mb-6">
-              <h3 className="text-lg font-medium mb-3 text-primary">
-                {category.category}
-              </h3>
-              <div className="flex flex-wrap gap-2 mb-4">
-                {category.skills.map((skill, index) => (
-                  <Badge
-                    key={index}
-                    variant={
-                      selectedSkills.includes(skill) ? "default" : "secondary"
-                    }
-                    className={`
-              cursor-pointer transition-colors hover:scale-105
-              ${
-                !selectedSkills.includes(skill)
-                  ? "border border-blue-200 bg-blue-50/60 text-blue-700 hover:bg-blue-100"
-                  : "border-transparent"
-              }
-            `}
-                    onClick={() => onSkillClick(skill)}
-                    title="Click to filter content"
-                  >
-                    {skill}
-                  </Badge>
-                ))}
+              <p className="mt-6 max-w-2xl text-base leading-8 text-slate-600 dark:text-slate-300 sm:text-lg">
+                {data.bio}
+              </p>
+              <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
+                {data.resume && (
+                  <Button className="h-11 rounded-full px-5 dark:bg-white dark:text-slate-950 dark:hover:bg-slate-200" asChild>
+                    <TrackedLink href={data.resume} download="resume.pdf" eventName="resume_download" eventProperties={{ location: "hero" }}>
+                      <Download className="mr-2 h-4 w-4" aria-hidden="true" />
+                      Download Resume
+                    </TrackedLink>
+                  </Button>
+                )}
+                <Button variant="outline" className="h-11 rounded-full border-slate-300 bg-white px-5 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 dark:hover:bg-slate-800" asChild>
+                  <TrackedLink href={`mailto:${data.email}`} eventName="email_click" eventProperties={{ location: "hero" }}>
+                    <Mail className="mr-2 h-4 w-4" aria-hidden="true" />
+                    Contact Me
+                  </TrackedLink>
+                </Button>
               </div>
             </div>
-          ))}
-        </section>
 
-        <section className="mb-12">
-          <h2 className="text-2xl font-semibold mb-4">
-            Experience{" "}
-            {selectedSkills.length > 0 && (
-              <span className="text-sm font-normal text-muted-foreground ml-2">
-                Filtered by:{" "}
-                {selectedSkills.join(isAndFilter ? " AND " : " OR ")}
-              </span>
-            )}
-          </h2>
-          {filteredExperience.length === 0 ? (
-            <p className="text-muted-foreground">
-              No experience entries match the selected skills.
-            </p>
-          ) : (
-            <div className="space-y-6">
-              {filteredExperience.map((exp, index) => (
-                <div
-                  key={index}
-                  className="border-l-2 border-muted pl-4 cursor-pointer hover:border-primary transition-colors duration-200"
-                  onClick={() => toggleExpand(index)}
+            <Card className="border-slate-200 bg-white shadow-sm transition-all duration-200 motion-safe:hover:-translate-y-0.5 hover:border-slate-300 hover:shadow-md dark:border-slate-800 dark:bg-slate-900 dark:hover:border-slate-700">
+              <CardContent className="p-6">
+                <p className="text-sm font-medium text-slate-500 dark:text-slate-400">At a glance</p>
+                <dl className="mt-5 grid gap-5">
+                  <div>
+                    <dt className="text-2xl font-semibold tracking-tight text-slate-950 dark:text-white">5+ years</dt>
+                    <dd className="mt-1 text-sm text-slate-600 dark:text-slate-300">Building production web applications</dd>
+                  </div>
+                  <div>
+                    <dt className="text-2xl font-semibold tracking-tight text-slate-950 dark:text-white">70k+ users</dt>
+                    <dd className="mt-1 text-sm text-slate-600 dark:text-slate-300">Supported through public-sector web systems</dd>
+                  </div>
+                  <div>
+                    <dt className="text-2xl font-semibold tracking-tight text-slate-950 dark:text-white">M.S. CS</dt>
+                    <dd className="mt-1 text-sm text-slate-600 dark:text-slate-300">Georgia Tech candidate, GPA 4.0</dd>
+                  </div>
+                </dl>
+              </CardContent>
+            </Card>
+          </section>
+
+          <section id="experience" className="scroll-mt-24 border-t border-slate-200 py-14 dark:border-slate-800 sm:py-16">
+            <SectionHeading
+              eyebrow="Experience"
+              title="Reliable software for real users."
+              description="A track record across public health systems, responsive web applications, authentication modernization, and deployment automation."
+            />
+
+            <div className="space-y-5">
+              {data.experience.map((exp) => (
+                <Card
+                  key={`${exp.company}-${exp.period}`}
+                  className="border-slate-200 bg-white shadow-sm transition-all duration-200 motion-safe:hover:-translate-y-0.5 hover:border-slate-300 hover:shadow-md dark:border-slate-800 dark:bg-slate-900 dark:hover:border-slate-700"
                 >
-                  <div className="flex justify-between items-start">
-                    <div>
-                      <h3 className="text-lg font-medium">{exp.position}</h3>
-                      <p className="text-primary font-medium">{exp.company}</p>
-                      <p className="text-sm text-muted-foreground mb-2">
-                        {exp.period}
-                      </p>
-                    </div>
-                    {exp.bulletPoints && exp.bulletPoints.length > 0 && (
-                      <div className="mt-1 pointer-events-none">
-                        {expandedExperience.includes(index) ? (
-                          <ChevronUp className="h-4 w-4" />
-                        ) : (
-                          <ChevronDown className="h-4 w-4" />
-                        )}
+                  <CardContent className="p-6 sm:p-7">
+                    <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
+                      <div>
+                        <h3 className="text-lg font-semibold tracking-tight text-slate-950 dark:text-white">
+                          {exp.position}
+                        </h3>
+                        <p className="mt-1 font-medium text-slate-700 dark:text-slate-200">{exp.company}</p>
                       </div>
+                      <p className="text-sm text-slate-500 dark:text-slate-400 sm:text-right">{exp.period}</p>
+                    </div>
+                    <p className="mt-4 leading-7 text-slate-600 dark:text-slate-300">{exp.description}</p>
+                    {exp.bulletPoints && exp.bulletPoints.length > 0 && (
+                      <ul className="mt-5 space-y-2 text-sm leading-6 text-slate-600 marker:text-slate-300 dark:text-slate-300 dark:marker:text-slate-600">
+                        {exp.bulletPoints.map((point) => (
+                          <li key={point} className="ml-4 list-disc pl-1">
+                            {point}
+                          </li>
+                        ))}
+                      </ul>
                     )}
-                  </div>
-                  <p className="text-muted-foreground mb-2">
-                    {exp.description}
-                  </p>
-
-                  {/* Expandable bullet points */}
-                  {expandedExperience.includes(index) && exp.bulletPoints && (
-                    <ul className="list-disc list-inside text-muted-foreground mb-3 pl-2 space-y-1">
-                      {exp.bulletPoints.map((point, i) => (
-                        <li key={i}>{point}</li>
-                      ))}
-                    </ul>
-                  )}
-
-                  <div className="flex flex-wrap gap-1">
-                    {exp.tags.map((tag, tagIndex) => (
-                      <Badge
-                        key={tagIndex}
-                        variant={
-                          selectedSkills.includes(tag) ? "default" : "outline"
-                        }
-                        className="text-xs"
-                      >
-                        {tag}
-                      </Badge>
-                    ))}
-                  </div>
-                </div>
+                    <div className="mt-5 border-t border-slate-100 pt-5 dark:border-slate-800">
+                      <p className="mb-3 text-xs font-semibold uppercase tracking-[0.2em] text-slate-400 dark:text-slate-500">
+                        Technologies
+                      </p>
+                      <TagList tags={exp.tags} />
+                    </div>
+                  </CardContent>
+                </Card>
               ))}
             </div>
-          )}
-        </section>
+          </section>
 
-        <section className="mb-12">
-          <h2 className="text-2xl font-semibold mb-4">
-            Projects{" "}
-            {selectedSkills.length > 0 && (
-              <span className="text-sm font-normal text-muted-foreground ml-2">
-                Filtered by:{" "}
-                {selectedSkills.join(isAndFilter ? " AND " : " OR ")}
-              </span>
-            )}
-          </h2>
-          {filteredProjects.length === 0 ? (
-            <p className="text-muted-foreground">
-              No projects match the selected skills.
-            </p>
-          ) : (
-            <div className="grid gap-4">
-              {filteredProjects.map((project, index) => (
+          <section id="projects" className="scroll-mt-24 border-t border-slate-200 py-14 dark:border-slate-800 sm:py-16">
+            <SectionHeading
+              eyebrow="Projects"
+              title="Selected work."
+              description="A few representative projects spanning portfolio development, application development, and machine learning fundamentals."
+            />
+
+            <div className="grid gap-5 md:grid-cols-3">
+              {data.projects.map((project) => (
                 <Card
-                  key={index}
-                  className="hover:shadow-md transition-shadow duration-300"
+                  key={project.title}
+                  className="flex border-slate-200 bg-white shadow-sm transition-all duration-200 motion-safe:hover:-translate-y-0.5 hover:border-slate-300 hover:shadow-md dark:border-slate-800 dark:bg-slate-900 dark:hover:border-slate-700"
                 >
-                  <CardContent className="pt-6">
-                    <h3 className="text-lg font-medium mb-2 text-foreground">
-                      {project.title}
-                    </h3>
-                    <p className="text-muted-foreground mb-3">
-                      {project.description}
-                    </p>
-                    <div className="flex flex-wrap gap-1 mb-4">
-                      {project.tags.map((tag, tagIndex) => (
-                        <Badge
-                          key={tagIndex}
-                          variant={
-                            selectedSkills.includes(tag) ? "default" : "outline"
-                          }
-                          className="text-xs transition-colors duration-200"
-                        >
-                          {tag}
-                        </Badge>
-                      ))}
+                  <CardContent className="flex min-h-full flex-col p-6">
+                    <h3 className="text-lg font-semibold tracking-tight text-slate-950 dark:text-white">{project.title}</h3>
+                    <p className="mt-3 flex-1 text-sm leading-6 text-slate-600 dark:text-slate-300">{project.description}</p>
+                    <div className="mt-5">
+                      <TagList tags={project.tags} limit={4} />
                     </div>
-                    <Button
-                      variant="outline"
-                      className="hover:bg-primary hover:text-primary-foreground transition-colors"
-                      asChild
-                    >
-                      <a
-                        href={project.link}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
+                    <Button variant="outline" className="mt-6 rounded-full border-slate-300 bg-white dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 dark:hover:bg-slate-800" asChild>
+                      <TrackedLink href={project.link} target="_blank" rel="noopener noreferrer" eventName="project_click" eventProperties={{ project: project.title }}>
                         View Project
-                      </a>
+                        <ArrowUpRight className="ml-2 h-4 w-4" aria-hidden="true" />
+                      </TrackedLink>
                     </Button>
                   </CardContent>
                 </Card>
               ))}
             </div>
-          )}
-        </section>
+          </section>
 
-        <section>
-          <h2 className="text-2xl font-semibold mb-4">Education</h2>
-          <div className="space-y-6">
-            {data.education.map((edu, index) => (
-              <div key={index} className="border-l-2 border-muted pl-4">
-                <h3 className="text-lg font-medium">{edu.degree}</h3>
-                <p className="text-primary font-medium">{edu.institution}</p>
-                <p className="text-sm text-muted-foreground mb-2">
-                  {edu.period}
-                </p>
-                {edu.description && (
-                  <p className="text-muted-foreground mb-2">
-                    {edu.description}
+          <section id="skills" className="scroll-mt-24 border-t border-slate-200 py-14 dark:border-slate-800 sm:py-16">
+            <SectionHeading
+              eyebrow="Skills"
+              title="Practical tools across the stack."
+              description="Grouped by how they tend to show up in production work: frontend interfaces, backend services, data stores, and delivery tooling."
+            />
+
+            <div className="grid gap-4 sm:grid-cols-2">
+              {data.skillCategories.map((category) => (
+                <Card
+                  key={category.category}
+                  className="border-slate-200 bg-white shadow-sm transition-all duration-200 motion-safe:hover:-translate-y-0.5 hover:border-slate-300 hover:shadow-md dark:border-slate-800 dark:bg-slate-900 dark:hover:border-slate-700"
+                >
+                  <CardContent className="p-6">
+                    <h3 className="mb-4 font-semibold tracking-tight text-slate-950 dark:text-white">{category.category}</h3>
+                    <ExpandableTagList tags={category.skills} initialLimit={12} />
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          </section>
+
+          <section id="education" className="scroll-mt-24 border-t border-slate-200 py-14 dark:border-slate-800 sm:py-16">
+            <SectionHeading eyebrow="Education" title="Computer science foundation." />
+
+            <div className="grid gap-5 md:grid-cols-2">
+              {data.education.map((edu) => (
+                <Card
+                  key={`${edu.institution}-${edu.period}`}
+                  className="border-slate-200 bg-white shadow-sm transition-all duration-200 motion-safe:hover:-translate-y-0.5 hover:border-slate-300 hover:shadow-md dark:border-slate-800 dark:bg-slate-900 dark:hover:border-slate-700"
+                >
+                  <CardContent className="p-6">
+                    <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
+                      <div>
+                        <h3 className="font-semibold tracking-tight text-slate-950 dark:text-white">{edu.degree}</h3>
+                        <p className="mt-1 text-sm font-medium text-slate-700 dark:text-slate-200">{edu.institution}</p>
+                      </div>
+                      <p className="text-sm text-slate-500 dark:text-slate-400 sm:text-right">{edu.period}</p>
+                    </div>
+                    {edu.description && <p className="mt-4 text-sm text-slate-600 dark:text-slate-300">{edu.description}</p>}
+                    {edu.tags && (
+                      <div className="mt-5">
+                        <TagList tags={edu.tags} limit={6} />
+                      </div>
+                    )}
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          </section>
+
+          <section id="contact" className="scroll-mt-24 border-t border-slate-200 py-14 dark:border-slate-800 sm:py-16">
+            <Card className="border-slate-200 bg-slate-950 text-white shadow-sm transition-all duration-200 motion-safe:hover:-translate-y-0.5 hover:shadow-lg dark:border-slate-800 dark:bg-white dark:text-slate-950">
+              <CardContent className="flex flex-col gap-8 p-7 sm:flex-row sm:items-center sm:justify-between sm:p-8">
+                <div>
+                  <p className="text-xs font-semibold uppercase tracking-[0.25em] text-slate-400 dark:text-slate-500">Contact</p>
+                  <h2 className="mt-3 text-2xl font-semibold tracking-tight">Let’s build something reliable.</h2>
+                  <p className="mt-3 max-w-xl text-sm leading-6 text-slate-300 dark:text-slate-600">
+                    The easiest way to reach me is by email. You can also find more of my work on GitHub and connect with me on LinkedIn.
                   </p>
-                )}
-                {edu.tags && (
-                  <div className="flex flex-wrap gap-1">
-                    {edu.tags.map((tag, tagIndex) => (
-                      <Badge
-                        key={tagIndex}
-                        variant={
-                          selectedSkills.includes(tag) ? "default" : "outline"
-                        }
-                        className="text-xs"
+                </div>
+                <div className="flex flex-wrap gap-3">
+                  {data.resume && (
+                    <Button variant="secondary" className="rounded-full bg-white text-slate-950 hover:bg-slate-100 dark:bg-slate-950 dark:text-white dark:hover:bg-slate-800" asChild>
+                      <TrackedLink href={data.resume} download="resume.pdf" eventName="resume_download" eventProperties={{ location: "contact" }}>
+                        <Download className="mr-2 h-4 w-4" aria-hidden="true" />
+                        Resume
+                      </TrackedLink>
+                    </Button>
+                  )}
+                  {socialLinks.map(({ label, href, Icon }) => (
+                    <Button key={label} variant="secondary" className="rounded-full bg-white text-slate-950 hover:bg-slate-100 dark:bg-slate-950 dark:text-white dark:hover:bg-slate-800" asChild>
+                      <TrackedLink
+                        href={href}
+                        target={label === "Email" ? undefined : "_blank"}
+                        rel={label === "Email" ? undefined : "noopener noreferrer"}
+                        eventName={label === "Email" ? "email_click" : `${label.toLowerCase()}_click`}
+                        eventProperties={{ location: "contact" }}
                       >
-                        {tag}
-                      </Badge>
-                    ))}
-                  </div>
-                )}
-              </div>
-            ))}
-          </div>
-        </section>
+                        <Icon className="mr-2 h-4 w-4" aria-hidden="true" />
+                        {label}
+                      </TrackedLink>
+                    </Button>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+          </section>
+        </main>
+        <BackToTop />
       </div>
     </div>
   );
 }
+
+export default MinimalTemplate;
