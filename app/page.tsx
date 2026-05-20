@@ -99,6 +99,21 @@ const personalData: PersonalData = {
   ],
   experience: [
     {
+      company: "Data Annotation",
+      position: "AI Trainer, Contractor",
+      period: "May 2026 - Present",
+      description:
+        "Evaluate and improve AI model behavior by designing coding and UI/UX assessment tasks, eliciting model errors, and providing structured feedback on accuracy, safety, and instruction-following.",
+      bulletPoints: [
+        "Utilize Reinforcement Learning from Human Feedback (RLHF) workflows to help improve model performance across coding and product evaluation tasks",
+        "Design prompts and test cases to elicit failures from coding models, including issues with correctness, reasoning, instruction-following, and edge-case handling",
+        "Evaluate competing model responses and UI/UX layouts to identify stronger outputs based on usability, clarity, accessibility, and user intent",
+        "Assess model outputs for truthfulness, harmlessness, safety, and alignment with legal and ethical expectations",
+        "Perform quality assurance on analyst work, including prompts, feedback, conversations, and model response evaluations",
+      ],
+      tags: ["Docker", "Python", "UI/UX"],
+    },
+    {
       company: "California Department of Public Health (CDPH)",
       position: "Software Developer",
       period: "May 2020 - Present",
